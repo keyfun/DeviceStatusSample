@@ -31,6 +31,8 @@ class NetworkHelper: NSObject {
     
     var status:NetworkStatus?
     
+    private var isStarted:Bool = false
+    
     override init() {
         super.init()
         
@@ -43,6 +45,10 @@ class NetworkHelper: NSObject {
     }
     
     func startListen() {
+        if(isStarted) {
+            return;
+        }
+        isStarted = true
         NSNotificationCenter.defaultCenter().addObserver(self,
             selector: "reachabilityChanged:",
             name: ReachabilityChangedNotification,
@@ -56,6 +62,7 @@ class NetworkHelper: NSObject {
     }
     
     func stopListen() {
+        isStarted = false
         reachability?.stopNotifier()
         NSNotificationCenter.defaultCenter().removeObserver(self,
             name: ReachabilityChangedNotification,
